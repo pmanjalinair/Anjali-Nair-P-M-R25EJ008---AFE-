@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24/7 Pulse | Live News Network</title>
+    <style>
+        /* Global Reset & Variables */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #dc3545;
+            --dark-color: #1a1a1a;
+            --light-color: #f8f9fa;
+            --text-dark: #333;
+            --text-light: #fff;
+        }
+
+        body {
+            background-color: #f4f5f7;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--dark-color);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-top {
+            background-color: #000;
+            padding: 10px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: inline-block;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            border-bottom: 4px solid var(--primary-color);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            background-color: var(--primary-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Ticker Tape */
+        .ticker-wrapper {
+            background-color: #eed1d1;
+            color: #b21f2d;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            height: 40px;
+            font-weight: bold;
+        }
+
+        .ticker-title {
+            background: var(--primary-color);
+            color: #fff;
+            padding: 0 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            z-index: 2;
+        }
+
+        .ticker-text {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: ticker 25s linear infinite;
+        }
+
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* News Cards & Grid */
+        .main-stories {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .featured-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .featured-img {
+            width: 100%;
+            height: 400px;
+            background-color: #ddd;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 25px;
+        }
+
+        .badge {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 3px;
+        }
+
+        .card-title {
+            margin: 15px 0 10px 0;
+            font-size: 1.8rem;
+            line-height: 1.3;
+        }
+
+        .sub-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .sub-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .news-card {
+            background: #fff;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .news-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: #ddd;
+        }
+
+        /* Sidebar Live Feed */
+        .sidebar {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+
+        .sidebar-title {
+            font-size: 1.4rem;
+            border-bottom: 2px solid var(--dark-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .live-stream-box {
+            background: #000;
+            color: #fff;
+            height: 200px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .feed-container {
+            max-height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-right: 5px;
+        }
+
+        .feed-item {
+            padding-left: 15px;
+            border-left: 3px solid var(--primary-color);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .feed-time {
+            font-size: 0.75rem;
+            color: #777;
+            font-weight: bold;
+        }
+
+        .feed-text {
+            font-size: 0.9rem;
+            margin-top: 2px;
+        }
+
+        footer {
+            background: var(--dark-color);
+            color: #aaa;
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-top">
+            <div id="current-date">Loading Date...</div>
+            <div class="live-indicator">
+                <span class="dot"></span> LIVE BROADCAST
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="logo">24/7 <span>PULSE</span></div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">World</a></li>
+                <li><a href="#">Technology</a></li>
+                <li><a href="#">Business</a></li>
+                <li><a href="#">Sports</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="ticker-wrapper">
+        <div class="ticker-title">BREAKING NEWS</div>
+        <div class="ticker-text" id="ticker-content">
+            • Global Markets reach record highs amid tech surge &nbsp;&nbsp;&nbsp;&nbsp;
+            • Major breakthrough in renewable energy storage announced &nbsp;&nbsp;&nbsp;&nbsp;
+            • International Space Station successfully redirects paths to avoid space debris
+        </div>
+    </div>
+
+    <main class="container">
+        
+        <section class="main-stories">
+            <article class="featured-card">
+                <img src="https://picsum.photos/800/400?random=1" alt="Featured News" class="featured-img">
+                <div class="card-content">
+                    <span class="badge">Technology</span>
+                    <h1 class="card-title">The Next Era of AI Integration Begins: What to Expect Next</h1>
+                    <p>Tech giants have unified to roll out the new global infrastructure standard. Experts suggest this deployment will change daily operations across every major sector by year's end.</p>
+                </div>
+            </article>
+
+            <div class="sub-grid">
+                <article class="news-card">
+                    <img src="https://picsum.photos/400/250?random=2" alt="World News">
+                    <div class="card-content">
+                        <span class="badge">World</span>
+                        <h3>Global Summit Addresses Climate Action Strategies</h3>
+                    </div>
+                </article>
+                <article class="news-card">
+                    <img src="https://picsum.photos/400/250?random=3" alt="Business News">
+                    <div class="card-content">
+                        <span class="badge">Business</span>
+                        <h3>Electric Vehicle Infrastructure Expands by 40%</h3>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <aside class="sidebar">
+            <div class="sidebar-title">
+                <span>Live Stream</span>
+                <span class="dot"></span>
+            </div>
+            
+            <div class="live-stream-box">
+                <p>📺 Live Video Feed Placeholder</p>
+            </div>
+
+            <div class="sidebar-title">Real-Time Feed</div>
+            
+            <div class="feed-container" id="live-feed">
+                <div class="feed-item">
+                    <div class="feed-time">10:15 AM</div>
+                    <div class="feed-text">Coastal regions report record high ocean cleanups.</div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-time">10:02 AM</div>
+                    <div class="feed-text">A breakthrough battery prototype charges fully in under 2 minutes.</div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-time">09:45 AM</div>
+                    <div class="feed-text">Central bank announces unchanged interest rates for Q3.</div>
+                </div>
+            </div>
+        </aside>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 24/7 Pulse News Network. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 1. Set Current Date and Time
+        function updateDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').innerText = now.toLocaleDateString('en-US', options);
+        }
+        updateDate();
+
+        // 2. Simulate a "Live Feed" by injecting news updates dynamically
+        const sampleUpdates = [
+            "Stock indices spike as manufacturing sector posts strong gains.",
+            "International space mission successfully clears scheduled docking maneuvers.",
+            "New archeological discovery in Egypt dates back over 4,000 years.",
+            "Championship finals rescheduled due to heavy localized rainfall.",
+            "Major smartphone manufacturer announces eco-friendly modular hardware.",
+            "Global medical trial reports 95% success rate for targeted enzyme therapy."
+        ];
+
+        const feedContainer = document.getElementById('live-feed');
+
+        function addLiveUpdate() {
+            // Get random headline from list
+            const randomIndex = Math.floor(Math.random() * sampleUpdates.length);
+            const headline = sampleUpdates[randomIndex];
+            
+            // Get current timestamp
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+            // Create new feed element
+            const newItem = document.createElement('div');
+            newItem.className = 'feed-item';
+            newItem.innerHTML = `
+                <div class="feed-time">${timeString} - BREAKING</div>
+                <div class="feed-text" style="font-weight: 500;">${headline}</div>
+            `;
+
+            // Insert at the top of the feed container
+            feedContainer.insertBefore(newItem, feedContainer.firstChild);
+
+            // Limit feed container to 6 items max to keep UI clean
+            if (feedContainer.children.length > 6) {
+                feedContainer.removeChild(feedContainer.lastChild);
+            }
+        }
+
+        // Trigger a new live update every 7 seconds
+        setInterval(addLiveUpdate, 7000);
+    </script>
+</body>
+</html>
